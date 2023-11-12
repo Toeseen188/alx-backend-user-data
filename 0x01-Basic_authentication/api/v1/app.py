@@ -17,8 +17,14 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 auth = getenv('AUTH_TYPE')
 if auth:
-    from api.v1.auth.auth import Auth
-    auth = Auth()
+    try:
+        from api.v1.auth.auth import Auth
+    except ImportError:
+        raise ImportError("Import Error")
+else:
+    auth = None
+
+auth = Auth()
 
 excl_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
@@ -34,17 +40,16 @@ def before_request():
     not_among = auth.require_auth(request.path, excl_paths)
 
     if not_among is True:
-        pass
 
-    auth_header = auth.authorization_header(request)
+        auth_header = auth.authorization_header(request)
 
-    current_user = auth.current_user(request)
+        current_user = auth.current_user(request)
 
-    if auth_header is None:
-        abort(401)
+        if auth_header is None:
+            abort(401)
 
-    if current_user is None:
-        abort(403)
+        if current_user is None:
+            abort(403)
 
 
 @app.errorhandler(404)
