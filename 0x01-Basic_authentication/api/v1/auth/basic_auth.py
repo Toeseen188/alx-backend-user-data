@@ -3,7 +3,6 @@
 Basic Authentication
 """
 from api.v1.auth.auth import Auth
-Auth = Auth()
 
 
 class BasicAuth(Auth):
