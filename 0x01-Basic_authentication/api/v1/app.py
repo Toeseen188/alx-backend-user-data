@@ -24,7 +24,7 @@ if auth:
     auth = Auth()
 
 else:
-    from api.vi.auth.basic_auth import BasicAuth
+    from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 
 excl_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
