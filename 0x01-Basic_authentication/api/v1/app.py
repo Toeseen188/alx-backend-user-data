@@ -19,8 +19,7 @@ auth = getenv('AUTH_TYPE')
 
 if auth:
     from api.v1.auth.auth import Auth
-
-auth = Auth()
+    auth = Auth()
 
 excl_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
