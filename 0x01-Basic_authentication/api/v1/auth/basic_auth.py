@@ -89,14 +89,16 @@ class BasicAuth(Auth):
             return None
 
         user = User()
-        found_users = user.search(user_email)
+        # found_users = user.search(user_email)
+        if user.email not in User.search():
+            return None
 
-        if not found_users:
+        """if not found_users:
             return None
 
         user_ = found_users[0]
-
-        if not user_.is_valid_password(user_pwd):
+        """
+        if not user.is_valid_password(user_pwd):
             return None
 
-        return user_
+        return user
