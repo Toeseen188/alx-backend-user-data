@@ -89,7 +89,8 @@ class BasicAuth(Auth):
             return None
 
         # search through saved user object to see if user_email is found
-        found_users = User.search({'email': user_email})
+        user_obj = User()
+        found_users = user_obj.search({'email': user_email})
 
         if not found_users:
             return None
