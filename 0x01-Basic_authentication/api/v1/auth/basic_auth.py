@@ -110,20 +110,20 @@ class BasicAuth(Auth):
         if request is None:
             request = request
 
-        header = Auth.authorization_header(request)
+            header = Auth.authorization_header(request)
 
-        extract = BasicAuth.extract_base64_authorization_header(header)
+            extract = BasicAuth.extract_base64_authorization_header(header)
 
-        credentials = BasicAuth.decode_base64_authorization_header(extract)
+            credentials = BasicAuth.decode_base64_authorization_header(extract)
 
-        if credentials is None:
-            abort(401)
+            if credentials is None:
+                abort(401)
 
-        email, password = BasicAuth.extract_user_credentials(user_credentials)
+            email, password = BasicAuth.extract_user_credentials(credentials)
 
-        user_obj = BasicAuth.user_object_from_credentials(email, password)
+            user_obj = BasicAuth.user_object_from_credentials(email, password)
 
-        if user_obj is None:
-            abort(403)
+            if user_obj is None:
+                abort(403)
 
-        return user_obj
+            return user_obj
