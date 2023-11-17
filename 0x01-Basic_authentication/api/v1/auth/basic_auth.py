@@ -2,6 +2,7 @@
 """
 Basic Authentication
 """
+from flask import request
 from api.v1.auth.auth import Auth
 import base64
 from models.user import User
@@ -101,3 +102,28 @@ class BasicAuth(Auth):
             return None
 
         return user
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """overload Auth and retrieve all the User instances from the request
+        """
+        # if request is not provided, use flask request
+        if request is None:
+            request = request
+
+        header = Auth.authorization_header(request)
+
+        extract = BasicAuth.extract_base64_authorization_header(header)
+
+        credentials = BasicAuth.decode_base64_authorization_header(extract)
+
+        if credentials is None:
+            abort(401)
+
+        email, password = BasicAuth.extract_user_credentials(user_credentials)
+
+        user_obj = BasicAuth.user_object_from_credentials(email, password)
+
+        if user_obj is None:
+            abort(403)
+
+        return user_obj
