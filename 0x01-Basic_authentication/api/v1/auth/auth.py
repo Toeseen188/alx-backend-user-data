@@ -23,10 +23,16 @@ class Auth:
             for i in excluded_paths:
                 i = i.rstrip('*') + '*'
                 temp.append(i)
-            if path in temp:
+            for i in temp:
+                for j in path:
+                    if j == i:
+                        return False
+                    else:
+                        return True
+            """if path in temp:
                 return False
             else:
-                return True
+                return True"""
         return True
 
     def authorization_header(self, request=None) -> str:
