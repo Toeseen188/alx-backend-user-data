@@ -2,7 +2,7 @@
 """
 Basic Authentication
 """
-from flask import request
+from flask import request as flask_request, abort
 from api.v1.auth.auth import Auth
 import base64
 from models.user import User
@@ -51,7 +51,7 @@ class BasicAuth(Auth):
             decoded_string = decoded_bytes.decode('utf-8')
             return decoded_string
         except Exception as e:
-            return None
+            return e
 
     def extract_user_credentials(self,
                                  decoded_base64_authorization_header:
@@ -108,22 +108,21 @@ class BasicAuth(Auth):
         """
         # if request is not provided, use flask request
         if request is None:
-            request = request
+            request = flask_request
 
-            header = Auth.authorization_header(request)
+        header = self.authorization_header(request)
 
-            extract = BasicAuth.extract_base64_authorization_header(header)
+        extract = self.extract_base64_authorization_header(header)
 
-            credentials = BasicAuth.decode_base64_authorization_header(extract)
+        credentials = self.decode_base64_authorization_header(extract)
 
-            if credentials is None:
-                abort(401)
+        if credentials is None:
+            abort(401)
 
-            email, password = BasicAuth.extract_user_credentials(credentials)
+        email, password = self.extract_user_credentials(credentials)
+        user = self.user_object_from_credentials(email, password)
 
-            user_obj = BasicAuth.user_object_from_credentials(email, password)
+        if user is None:
+            abort(403)
 
-            if user_obj is None:
-                abort(403)
-
-            return user_obj
+        return user
