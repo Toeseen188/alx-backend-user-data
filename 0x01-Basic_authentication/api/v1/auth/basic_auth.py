@@ -117,12 +117,12 @@ class BasicAuth(Auth):
         credentials = self.decode_base64_authorization_header(extract)
 
         if credentials is None:
-            abort(401)
+            return None
 
         email, password = self.extract_user_credentials(credentials)
         user = self.user_object_from_credentials(email, password)
 
         if user is None:
-            abort(403)
+            return None
 
         return user
