@@ -18,10 +18,10 @@ class Auth:
         - bool
         """
         if path is not None and excluded_paths is not None or []:
-            path = path.rstrip('/') + '/'
+            path = path.rstrip('*') + '*'
             temp = []
             for i in excluded_paths:
-                i = i.rstrip('/') + '/'
+                i = i.rstrip('*') + '*'
                 temp.append(i)
             if path in temp:
                 return False
