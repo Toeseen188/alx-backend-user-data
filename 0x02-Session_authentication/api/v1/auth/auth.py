@@ -2,6 +2,7 @@
 """
 authentication of user data
 """
+from os import getenv
 from flask import request
 from typing import List, TypeVar
 
@@ -47,3 +48,19 @@ class Auth:
         current authentication
         """
         return None
+
+    def session_cookie(self, request=None):
+        """
+        Return:
+         - None if request is None
+         - value of the cookie named _my_session_id from request
+         - the name of the cookie must be defined by the environment
+         variable SESSION_NAME
+        """
+        if request is None:
+            return None
+        cookies = request.cookies
+
+        if getenv("SESSION_NAME"):
+            _my_session_id = getenv("SESSION_NAME")
+            return cookies.get(_my_session_id)
