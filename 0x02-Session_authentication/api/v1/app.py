@@ -41,7 +41,6 @@ def before_request():
         pass
 
     not_among = auth.require_auth(request.path, excl_paths)
-
     if not_among is True:
 
         auth_header = auth.authorization_header(request)
